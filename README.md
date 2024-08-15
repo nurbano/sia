@@ -1,6 +1,6 @@
 ## Repo Curso SIA -ITBA 
 Año: 2024
 
-###Integrantes:
+### Integrantes:
 - Juan Dusau
 - Nicolás Urbano Pintos
