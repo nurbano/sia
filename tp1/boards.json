@@ -1,0 +1,66 @@
+[
+  {
+    "name": "simple",
+    "config": [
+      "WWWWW",
+      "W00XW",
+      "W000W",
+      "W000W",
+      "WWWWW",
+      "3,3",
+      "2,2"
+    ]
+  },
+  {
+    "name": "easy",
+    "config": [
+      "WWWWWW",
+      "W000WW",
+      "WX0X0W",
+      "W00W0W",
+      "W0000W",
+      "WWWWWW",
+      "1,1",
+      "2,2",
+      "2,3"
+    ]
+  },
+  {
+    "name": "hard",
+    "config": [
+      "WWWWWWWW00",
+      "W0XXW00W00",
+      "W0XXW00WWW",
+      "W00WW0000W",
+      "WW0000000W",
+      "WW0WW00WWW",
+      "WW0000WW00",
+      "WWWW00W000",
+      "WWWW00W000",
+      "WWWWWWW000",
+      "9,4",
+      "4,3",
+      "4,7",
+      "2,6",
+      "6,5"
+    ]
+  },
+  {
+    "name": "medium",
+    "config": [
+      "WWWWW00",
+      "W000W00",
+      "W0XXWWW",
+      "W00000W",
+      "WXXX00W",
+      "W00000W",
+      "WWWWWWW",
+      "5,4",
+      "2,2",
+      "2,3",
+      "4,2",
+      "4,3",
+      "4,4"
+    ]
+  }
+]
