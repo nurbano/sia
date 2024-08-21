@@ -63,4 +63,19 @@
       "4,4"
     ]
   }
+   {
+    "name": "diagonal",
+    "config": [
+      "WWWWWWWW",
+      "WX000WWW",
+      "WW0000WW",
+      "WWW0000W",
+      "WWWW000W",
+      "WWWWW0W0",
+      "WWWWWWW0",
+      "4,4",
+      "2,2",
+      "3,4"
+    ]
+  } 
 ]
