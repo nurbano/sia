@@ -76,5 +76,21 @@
       "5,5",
       "4,5"
     ]
-  } 
+  },
+  {	"name": "zigzag",
+      "config": [
+        "WWWWWWWWWW",
+        "W00000000W",
+        "WWWWWW000W",
+        "W0000WWWWW",
+        "W00000000W",
+        "WWWWWW000W",
+        "W0000WWWWW",
+        "W00000000W",
+        "WWWWWWWWWW",
+        "3,1",  
+        "4,8",  
+        "6,2" 
+    ]
+  }
 ]
