@@ -60,10 +60,12 @@ def measure_algorithm_performance(algorithm, stateObj, obstacles, storages, opti
             "Nodos Frontera": f"{frontier_size} nodos",
             "Tiempo de Ejecución": f"{end_time - start_time:.4f} segundos",
             "Memoria Utilizada": f"{memory_used / 1024:.2f} MB",
-            "Optimalidad": optimality
-        }
+            "Optimalidad": optimality,
+                               
+        }, moves
     else:
         return None
+    
 def board_to_array(state, obstacles, storages, high, width):
     board = state.getMap(obstacles, storages, high, width)
     board_array = np.array([[1 if cell == 'W' else 2 if cell == 'X' else 3 if cell == 'B' else 4 if cell == 'I' else 0
@@ -154,8 +156,8 @@ def animate_func(i, tup):
   if i<len(moves):
     ax.set_title(f"Move {i+1}: {moves[i]}")
     ax.imshow(mat[i])
-    # for storage in storages:
-    #   ax.add_patch(plt.Rectangle((storage[1] - 0.5, storage[0] - 0.5), 1, 1, fill=False, edgecolor='red', lw=2))
+    for storage in storages:
+      ax.add_patch(plt.Rectangle((storage[1] - 0.5, storage[0] - 0.5), 1, 1, fill=False, edgecolor='red', lw=2))
   else:
     ax.imshow(mat[len(mat)-1])
   ax.axis('off')
@@ -174,9 +176,17 @@ def make_video(save, board, algo, moves, state, obstacles, storages, high, width
                             animate_func,
                             frames = len(moves)+5,
                             fargs= tup,
-                            interval = 1000/20, # in ms
+                            interval = 1000/10, # in ms
                             repeat=False)
     plt.show()
     if save:
-       anim.save(f'{board}_{algo}.mp4', fps=20, extra_args=['-vcodec', 'libx264'])
+       anim.save(f'{board}_{algo}.mp4', fps=10, extra_args=['-vcodec', 'libx264'])
    
+def show_map(state, obstacles, storages, high, width):
+   board_array= board_to_array(state, obstacles, storages, high, width)
+   fig,ax= plt.subplots(1)
+   ax.imshow(board_array, cmap='viridis')
+   for storage in storages:
+      ax.add_patch(plt.Rectangle((storage[1] - 0.5, storage[0] - 0.5), 1, 1, fill=False, edgecolor='red', lw=2))
+
+   plt.show()
