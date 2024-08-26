@@ -28,6 +28,39 @@
     ]
   },
   {
+    "name": "easy2",
+    "cajas": 3,
+    "config": [
+      "WWWWWWW",
+      "W0000WW",
+      "WX0X00W",
+      "W00W00W",
+      "W00X00W",
+      "WWWWWWW",
+      "1,1",
+      "2,2",
+      "2,3",
+      "4,2"
+    ]
+  },
+  {
+    "name": "deadlock",
+    "cajas": 3,
+    "config": [
+      "WWWWWWWWWW",
+      "WXX0W0000W",
+      "WX0000000W",
+      "W000W0000W",
+      "WWWWW000WW",
+      "WWWWW000WW",
+      "WWWWWWWWWW",
+      "3,7", 
+      "2,4", 
+      "2,7", 
+      "3,6"  
+    ]
+  },
+  {
     "name": "hard",
     "cajas": 4,
     "config": [

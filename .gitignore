@@ -1,5 +1,6 @@
 *.mp4
 *.png
+*.xlsx
 
 tp1/scr/__pycache__/search.cpython-312.pyc
 tp1/scr/__pycache__/sokoban.cpython-312.pyc

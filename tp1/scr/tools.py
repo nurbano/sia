@@ -33,11 +33,11 @@ def readBoard(board, obstacles, storages, stateObj):
     stateObj = State(agent, boxes, (0, 0))
     return obstacles, storages, stateObj, len(board), len(board[0])
 
-def measure_algorithm_performance(algorithm, stateObj, obstacles, storages, optimal_depth=None):
+def measure_algorithm_performance(algorithm, heuristic, stateObj, obstacles, storages, optimal_depth=None):
     start_time = time.time()
     tracemalloc.start()
 
-    result, taboo, frontier_size = algorithm(stateObj, obstacles, storages)
+    result, taboo, frontier_size = algorithm(heuristic, stateObj, obstacles, storages)
 
     memory_used = tracemalloc.get_traced_memory()[1]
     tracemalloc.stop()
@@ -55,11 +55,11 @@ def measure_algorithm_performance(algorithm, stateObj, obstacles, storages, opti
             optimality = "No"  # Si no tenemos referencia, no podemos determinar optimalidad
 
         return {
-            "Profundidad de la Solución": f"{depth} movimientos",
-            "Nodos Expandidos": f"{nodes_expanded} nodos",
-            "Nodos Frontera": f"{frontier_size} nodos",
-            "Tiempo de Ejecución": f"{end_time - start_time:.4f} segundos",
-            "Memoria Utilizada": f"{memory_used / 1024:.2f} MB",
+            "Profundidad de la Solución": depth,
+            "Nodos Expandidos": nodes_expanded,
+            "Nodos Frontera": frontier_size,
+            "Tiempo de Ejecución (s)": end_time - start_time,
+            "Memoria Utilizada (MB)": memory_used/1024,
             "Optimalidad": optimality,
                                
         }, moves
