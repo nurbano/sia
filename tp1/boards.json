@@ -13,6 +13,103 @@
     ]
   },
   {
+    "name": "simple2",
+    "cajas": 1,
+    "config": [
+      "WWWWWW",
+      "W000XW",
+      "W0000W",
+      "W0000W",
+      "WWWWWW",
+      "3,3",
+      "2,2"
+    ]
+  },
+  {
+    "name": "simple3",
+    "cajas": 1,
+    "config": [
+      "WWWWWWW",
+      "W0000XW",
+      "W00000W",
+      "W00000W",
+      "WWWWWWW",
+      "3,3",
+      "2,2"
+    ]
+  },
+  {
+    "name": "simple4",
+    "cajas": 1,
+    "config": [
+      "WWWWWWWW",
+      "W00000XW",
+      "W000000W",
+      "W000000W",
+      "WWWWWWWW",
+      "3,3",
+      "2,2"
+    ]
+  },
+  {
+    "name": "simple5",
+    "cajas": 1,
+    "config": [
+      "WWWWWWWWW",
+      "W000000XW",
+      "W0000000W",
+      "W0000000W",
+      "WWWWWWWWW",
+      "3,3",
+      "2,2"
+    ]
+  },
+  {
+    "name": "simple5_2",
+    "cajas": 1,
+    "config": [
+      "WWWWWWWWW",
+      "WX00000XW",
+      "W0000000W",
+      "W0000000W",
+      "WWWWWWWWW",
+      "3,3",
+      "2,2",
+      "2,3"
+    ]
+  },
+  {
+    "name": "simple5_3",
+    "cajas": 1,
+    "config": [
+      "WWWWWWWWW",
+      "WX00000XW",
+      "W0000000W",
+      "WX000000W",
+      "WWWWWWWWW",
+      "3,3",
+      "2,2",
+      "2,3",
+      "2,4"
+
+    ]
+  },
+  {
+    "name": "simple5_4",
+    "cajas": 1,
+    "config": [
+      "WWWWWWWWW",
+      "WX00000XW",
+      "W0000000W",
+      "WX00000XW",
+      "WWWWWWWWW",
+      "3,3",
+      "2,2",
+      "2,3",
+      "2,5"
+    ]
+  },
+  {
     "name": "easy",
     "cajas": 2,
     "config": [

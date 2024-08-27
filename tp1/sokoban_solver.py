@@ -89,8 +89,8 @@ for i in range(int(args.i)):
      df= pd.concat([df, df_aux.iloc[1:]])
 df.columns = df.iloc[0]
 df = df[1:]
-
-df.to_excel(f'results/{args.board}_{args.algorithm}_{args.i}_times.xlsx', index=False)
+if(i>=1):
+  df.to_excel(f'results/{args.board}_{args.algorithm}_{args.i}_times.xlsx', index=False)
 print(df.to_string(index=False))
 
 
