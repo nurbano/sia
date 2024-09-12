@@ -1,8 +1,11 @@
 {
-    "total_puntos": 200,
+    "total_puntos": 100,
     "poblacion": 100,
     "tiempo": 60,
-    "porcentajes_padres": 50
+    "porc_padres": 0.5,
+    "clase": "mago",
+    "porc_ruleta": 0.7,
+    "porc_elite": 0.5
 
 
 

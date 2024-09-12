@@ -20,8 +20,7 @@ def calcular_atributos_totales(cromosoma):
         "constitucion_total": 100 * math.tanh(0.01 * cromosoma["constitución"])
     } 
 
-def calcular_fitness_generacion(poblacion, clase_personaje):
-    return np.array([calcular_aptitud(clase_personaje, ind) for ind in poblacion])
+
 
 def plot_band_error_generation(x, y, y_upper, y_lower):
     # x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]

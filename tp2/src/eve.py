@@ -1,8 +1,8 @@
 import numpy as np
 
-def fitness(clase, cromosoma):
-
-    fuerza, destreza, inteligencia, vigor, constitucion, h= cromosoma
+def calcular_aptitud(clase, cromosoma):
+    #print(cromosoma)
+    fuerza, destreza, inteligencia, vigor, constitucion, h= cromosoma.values()
     fuerza_t= 100*np.tanh(0.01*fuerza)
     destreza_t= np.tanh(0.01*destreza)
     inteligencia_t= 0.6*np.tanh(0.01*inteligencia)
@@ -22,3 +22,6 @@ def fitness(clase, cromosoma):
     } 
     fitness= dict_fitness[clase][0]*ataque+dict_fitness[clase][1]*defensa
     return fitness
+
+def calcular_fitness_generacion(poblacion, clase_personaje):
+    return np.array([calcular_aptitud(clase_personaje, ind) for ind in poblacion])
