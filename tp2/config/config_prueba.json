@@ -5,8 +5,13 @@
     "porc_padres": 0.5,
     "clase": "mago",
     "porc_ruleta": 0.7,
-    "porc_elite": 0.5
-
+    "porc_elite": 0.5,
+    "porcentaje_hijos": 0.5,
+    "T0" : 100,  
+    "Tc" : 1,  
+    "t" : 10,
+    "tam_torneo": 3,
+    "th_torneo": 0.3  
 
 
 

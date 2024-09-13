@@ -1,8 +1,8 @@
 import argparse
 from src.tools import import_json, calcular_atributos_totales, plot_band_error_generation
 from src.poblacion import crear_poblacion_inicial
-from src.eve import calcular_aptitud, calcular_fitness_generacion
-from src.seleccion import seleccionar_padres, realizar_reemplazo
+from src.eve import calcular_aptitud, calcular_fitness_generacion, calcular_fitness_relativo
+from src.seleccion import seleccionar_padres, realizar_reemplazo, seleccionar_metodo, mostrar_seleccionados
 from src.crossover import realizar_crossover
 import sys
 import timeit
@@ -22,6 +22,8 @@ data= import_json(args.config_json)
 print(f'Puntos totales: {data["total_puntos"]}')
 print(f'Población: {data["poblacion"]}')
 print(f'Clase:  {data["clase"]}')
+
+K = int(data["porcentaje_hijos"] * data["poblacion"])
 
 # genes_mean= np.zeros((20,6))
 # genes_std= np.zeros((20,6))
@@ -87,12 +89,22 @@ print(f'Clase:  {data["clase"]}')
 
 poblacion= crear_poblacion_inicial(data["poblacion"],data["total_puntos"])
 fitness=calcular_fitness_generacion(poblacion,data["clase"])
+
 print(f'Fitness generación incial: {fitness.mean():.3f} (mean) | {fitness.std():.3f}(std)')
+fitness_rel= np.asarray(calcular_fitness_relativo(poblacion, calcular_aptitud, data["clase"]))
+print(f'Fitness Relativo generación incial: {fitness_rel.mean():.3f} (mean) | {fitness_rel.std():.3f}(std)')
+
+seleccionados = seleccionar_metodo(poblacion, 'torneo_probabilistico', calcular_aptitud, 
+                                   fitness_rel, data["clase"], K
+                                   , threshold=data["th_torneo"])
+mostrar_seleccionados("torneo_deterministico", seleccionados, calcular_aptitud, data["clase"])
+
 padres = seleccionar_padres(poblacion, fitness, data["porc_ruleta"], data["porc_padres"])
 
 #print(f'Len padres: {len(padres)}')
 fitness_padres =calcular_fitness_generacion(padres,data["clase"])  
 print(f'Fitness generación seleccionada: {fitness_padres.mean():.3f} (mean) | {fitness_padres.std():.3f}(std)')
+
 nueva_poblacion= realizar_reemplazo(poblacion, fitness, padres, fitness_padres, data["porc_elite"], data["poblacion"])
 fitness_nueva_poblacion =calcular_fitness_generacion(nueva_poblacion,data["clase"])  
 print(f'Fitness nueva población: {fitness_nueva_poblacion.mean():.3f} (mean) | {fitness_nueva_poblacion.std():.3f}(std)')

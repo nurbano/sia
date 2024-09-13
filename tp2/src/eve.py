@@ -25,3 +25,15 @@ def calcular_aptitud(clase, cromosoma):
 
 def calcular_fitness_generacion(poblacion, clase_personaje):
     return np.array([calcular_aptitud(clase_personaje, ind) for ind in poblacion])
+
+def calcular_fitness_relativo(poblacion, funcion_aptitud, clase_personaje):
+    """Calcula el fitness relativo para una población dada."""
+    fitness_totales = [funcion_aptitud(clase_personaje, cromosoma) for cromosoma in poblacion]
+    suma_fitness = sum(fitness_totales)
+
+    if suma_fitness == 0:
+        # Evitar división por cero si todos los valores de fitness son 0
+        return [1 / len(fitness_totales) for _ in fitness_totales]
+
+    fitness_relativo = [f / suma_fitness for f in fitness_totales]
+    return fitness_relativo
