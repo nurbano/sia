@@ -36,7 +36,7 @@ def plot_tasa_convergencia(tasa_convergencia):
             ] )
     fig.update_xaxes(title_text="Generación")
     fig.update_yaxes(title_text="Tasa de convergencia")
-    fig.write_image("images/convergencia.png")
+    fig.write_image("./images/convergencia.png")
     #fig.show()
 
 def plot_diversidad_genetica(y, y_upper, y_lower):
@@ -73,7 +73,7 @@ def plot_diversidad_genetica(y, y_upper, y_lower):
     #         ] )
     fig.update_xaxes(title_text="Generación")
     fig.update_yaxes(title_text="Diversidad Genética")
-    fig.write_image("images/diversidad.png")
+    fig.write_image("./images/diversidad.png")
     #fig.show()
 
 
@@ -112,7 +112,7 @@ def plot_band_error_aptitud(x, y, y_upper, y_lower, y_max, y_min):
             ) ] )
     fig.update_xaxes(title_text="Generación")
     fig.update_yaxes(title_text="Aptitud")
-    fig.write_image("images/aptitud.png")
+    fig.write_image("./images/aptitud.png")
     #fig.show()
 
 def plot_band_error_generation(x, y, y_upper, y_lower):
@@ -159,7 +159,7 @@ def plot_band_error_generation(x, y, y_upper, y_lower):
     fig.update_layout(height=900, width=1000, title_text="Distribución de Atributos", showlegend=True)
 
     # Mostrar la figura
-    fig.write_image("images/atributos.png")
+    fig.write_image("./images/atributos.png")
     #fig.show()
 
 def encontrar_mejor_cromosoma(poblacion, funcion_aptitud, clase_personaje):
