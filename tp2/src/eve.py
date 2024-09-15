@@ -1,7 +1,7 @@
 import numpy as np
 
 def calcular_aptitud(clase, cromosoma):
-    #print(cromosoma)
+    # print(clase)
     fuerza, destreza, inteligencia, vigor, constitucion, h= cromosoma.values()
     fuerza_t= 100*np.tanh(0.01*fuerza)
     destreza_t= np.tanh(0.01*destreza)

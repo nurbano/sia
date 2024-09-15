@@ -3,6 +3,7 @@ import math
 import numpy as np
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
+from .eve import calcular_aptitud
 
 def import_json(file_name):
 
@@ -23,32 +24,7 @@ def calcular_atributos_totales(cromosoma):
 
 
 def plot_band_error_generation(x, y, y_upper, y_lower):
-    # x = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    # y = [1, 2, 7, 4, 5, 6, 7, 8, 9, 10]
-    # y_upper = [2, 3, 8, 5, 6, 7, 8, 9, 10, 11]
-    # y_lower = [0, 1, 5, 3, 4, 5, 6, 7, 8, 9]
-    # print(x[0], y[0], y_upper[0], y_lower[0])
-    # print(np.concatenate((x,x[::-1])))
-    # print(np.concatenate((y,y[::-1])))
-    # fig = go.Figure([
-    #     for i in range(6):
-    #         go.Scatter(
-    #             x=x,
-    #             y=y[:,i],
-    #             line=dict(color='rgb(0,100,80)'),
-    #             mode='lines'
-    #         ),
-    #         go.Scatter(
-    #             x=np.concatenate((x,x[::-1])), # x, then x reversed
-    #             y=np.concatenate((y_upper[:,i],y_lower[:,i][::-1])), # upper, then lower reversed
-    #             fill='toself',
-    #             fillcolor='rgba(0,100,80,0.2)',
-    #             line=dict(color='rgba(255,255,255,0)'),
-    #             hoverinfo="skip",
-    #             showlegend=False
-    #         )
-    # ])
-    # fig.show()
+
     colors = ['rgb(0,100,80)', 'rgb(100,0,80)', 'rgb(80,100,0)', 'rgb(0,80,100)', 'rgb(80,0,100)', 'rgb(100,80,0)']
     fill_colors = ['rgba(0,100,80,0.2)', 'rgba(100,0,80,0.2)', 'rgba(80,100,0,0.2)', 'rgba(0,80,100,0.2)', 'rgba(80,0,100,0.2)', 'rgba(100,80,0,0.2)']
     atributos = ["fuerza", "destreza", "inteligencia", "vigor", "constitución", "altura"]
@@ -99,3 +75,18 @@ def plot_band_error_generation(x, y, y_upper, y_lower):
 
     # Mostrar la figura
     fig.show()
+
+def encontrar_mejor_cromosoma(poblacion, funcion_aptitud, clase_personaje):
+    """Encuentra el mejor cromosoma (con la mayor aptitud) en la población."""
+    mejor_cromosoma = max(poblacion, key=lambda ind: funcion_aptitud(clase_personaje, ind))
+    mejor_aptitud = funcion_aptitud(clase_personaje, mejor_cromosoma)
+    return mejor_cromosoma, mejor_aptitud
+
+def calcular_diversidad_genetica(poblacion, atributos):
+    """Calcula la diversidad genética como la desviación estándar de los valores de los atributos en toda la población."""
+    atributos_geneticos = {atributo: [individuo[atributo] for individuo in poblacion] for atributo in atributos}
+    diversidad_por_atributo = {atributo: np.std(valores) for atributo, valores in atributos_geneticos.items()}
+    diversidad_promedio = np.mean(list(diversidad_por_atributo.values()))
+    return diversidad_promedio
+
+

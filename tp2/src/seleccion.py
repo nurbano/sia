@@ -2,19 +2,35 @@ import numpy as np
 import random
 import math
 
-def seleccionar_padres(poblacion, fitness, A, porcentaje_padres):
-    num_padres = int(porcentaje_padres * len(poblacion))  # Número de padres a seleccionar
-    num_metodo1 = int(A * num_padres)
-    num_metodo2 = num_padres - num_metodo1
+# def seleccionar_padres(poblacion, fitness, A, porcentaje_padres):
+#     num_padres = int(porcentaje_padres * len(poblacion))  # Número de padres a seleccionar
+#     num_metodo1 = int(A * num_padres)
+#     num_metodo2 = num_padres - num_metodo1
 
-    # Método 1: Selección por ruleta
-    padres_ruleta = seleccionar_padres_ruleta(poblacion, fitness, num_metodo1)
+#     # Método 1: Selección por ruleta
+#     padres_ruleta = seleccionar_padres_ruleta(poblacion, fitness, num_metodo1)
 
-    # Método 2: Selección por torneo
-    padres_torneo = seleccionar_padres_torneo(poblacion, fitness, num_metodo2)
+#     # Método 2: Selección por torneo
+#     padres_torneo = seleccionar_padres_torneo(poblacion, fitness, num_metodo2)
 
-    # Unir los padres seleccionados por ambos métodos
-    padres = np.concatenate((padres_ruleta, padres_torneo))
+#     # Unir los padres seleccionados por ambos métodos
+#     padres = np.concatenate((padres_ruleta, padres_torneo))
+
+#     return padres
+def seleccionar_padres(poblacion, funcion_aptitud, fitness_relativo, clase_personaje, total_puntos, K, A):
+    """Selecciona padres utilizando dos métodos según el valor de A."""
+
+    # Método 1 para la selección de padres
+    num_padres_m1 = int(A * K)
+    print(clase_personaje)
+    padres_m1 = seleccionar_metodo(poblacion, 'elite', funcion_aptitud, fitness_relativo, clase_personaje,num_padres_m1)
+
+    # Método 2 para la selección de padres (el resto de los padres)
+    num_padres_m2 = K - num_padres_m1
+    padres_m2 = seleccionar_metodo(poblacion, 'ruleta', funcion_aptitud, fitness_relativo, clase_personaje, num_padres_m2)
+
+    # Combinar los padres seleccionados por ambos métodos
+    padres = padres_m1 + padres_m2
 
     return padres
 
@@ -173,3 +189,57 @@ def mostrar_seleccionados(metodo, seleccionados, funcion_aptitud, clase_personaj
         aptitud = funcion_aptitud(clase_personaje, cromosoma)
         print(f"Individuo {i+1}: {cromosoma}, Aptitud: {aptitud:.4f}")
     print("\n")  # Para separar cada método con un salto de línea
+
+#Todo Posibilidad de elegir método
+def seleccionar_nueva_generacion(poblacion, hijos, funcion_aptitud, fitness_relativo, clase_personaje, total_puntos, N, B, M):
+    atributos = ["fuerza", "destreza", "inteligencia", "vigor", "constitución"]
+
+    num_reemplazo_m1 = int(B * N)
+    seleccionados_m1 = seleccionar_metodo(poblacion + hijos, 'ranking', funcion_aptitud, fitness_relativo,clase_personaje, num_reemplazo_m1)
+
+    num_reemplazo_m2 = N - num_reemplazo_m1
+    seleccionados_m2 = seleccionar_metodo(poblacion + hijos, 'torneo_deterministico', funcion_aptitud, fitness_relativo,clase_personaje, num_reemplazo_m2, M=M)
+
+    nueva_generacion = seleccionados_m1 + seleccionados_m2
+    #print(len(nueva_generacion))
+
+    for cromosoma in nueva_generacion:
+        #print(cromosoma, atributos, total_puntos)
+        cromosoma = ajustar_suma_final(cromosoma, atributos, total_puntos)
+        
+        for attr in atributos:
+            cromosoma[attr] = round(cromosoma[attr])  # Asegurar que los valores sean enteros
+
+    return nueva_generacion
+
+def ajustar_suma_final(cromosoma, atributos_sum, total_puntos):
+    # Obtener los valores ajustados sin redondeo
+    suma_actual = sum(cromosoma[attr] for attr in atributos_sum)
+    #print("Suma Actual",suma_actual)
+    factor_ajuste = total_puntos / suma_actual
+    #print("Factor de ajuste", factor_ajuste)
+    for attr in atributos_sum:
+        cromosoma[attr] *= factor_ajuste
+    #print(cromosoma)
+    # Aplicar floor a los atributos y calcular la suma parcial
+    suma_parcial = 0
+    partes_enteras = {}
+    partes_decimales = {}
+    for attr in atributos_sum:
+        partes_enteras[attr] = int(cromosoma[attr])  # floor
+        partes_decimales[attr] = cromosoma[attr] - partes_enteras[attr]
+        suma_parcial += partes_enteras[attr]
+    #print("Suma parcial: ", suma_parcial)
+    # Calcular la diferencia y ordenar los atributos por su parte decimal descendente
+    diferencia = int(total_puntos - suma_parcial)
+    atributos_ordenados = sorted(partes_decimales.items(), key=lambda x: x[1], reverse=True)
+     # Distribuir los puntos restantes
+    for i in range(diferencia):
+        attr = atributos_ordenados[i % len(atributos_ordenados)][0]
+        partes_enteras[attr] += 1
+
+    # Actualizar el cromosoma con los valores finales
+    for attr in atributos_sum:
+        cromosoma[attr] = partes_enteras[attr]
+
+    return cromosoma

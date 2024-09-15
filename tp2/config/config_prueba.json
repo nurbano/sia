@@ -7,11 +7,18 @@
     "porc_ruleta": 0.7,
     "porc_elite": 0.5,
     "porcentaje_hijos": 0.5,
+    "prop_sel_padres": 0.7,
     "T0" : 100,  
     "Tc" : 1,  
     "t" : 10,
     "tam_torneo": 3,
-    "th_torneo": 0.3  
+    "th_torneo": 0.3,
+    "prop_reemplazo": 0.5,
+    "prob_mutacion": 0.1,
+    "max_generaciones": 50,
+    "delta_fitness_min": 0.001,
+    "max_estancamiento": 10
+
 
 
 
