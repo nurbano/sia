@@ -22,7 +22,7 @@ def seleccionar_padres(poblacion, funcion_aptitud, fitness_relativo, clase_perso
 
     # Método 1 para la selección de padres
     num_padres_m1 = int(A * K)
-    print(clase_personaje)
+    #print(clase_personaje)
     padres_m1 = seleccionar_metodo(poblacion, 'elite', funcion_aptitud, fitness_relativo, clase_personaje,num_padres_m1)
 
     # Método 2 para la selección de padres (el resto de los padres)
@@ -191,18 +191,18 @@ def mostrar_seleccionados(metodo, seleccionados, funcion_aptitud, clase_personaj
     print("\n")  # Para separar cada método con un salto de línea
 
 #Todo Posibilidad de elegir método
-def seleccionar_nueva_generacion(poblacion, hijos, funcion_aptitud, fitness_relativo, clase_personaje, total_puntos, N, B, M):
+def seleccionar_nueva_generacion(poblacion, hijos, funcion_aptitud, fitness_relativo, metodo_seleccion_1, metodo_seleccion_2, clase_personaje, total_puntos, N, B, **kwargs):
     atributos = ["fuerza", "destreza", "inteligencia", "vigor", "constitución"]
 
     num_reemplazo_m1 = int(B * N)
-    seleccionados_m1 = seleccionar_metodo(poblacion + hijos, 'ranking', funcion_aptitud, fitness_relativo,clase_personaje, num_reemplazo_m1)
+    seleccionados_m1 = seleccionar_metodo(poblacion + hijos, metodo_seleccion_1, funcion_aptitud, fitness_relativo,clase_personaje, num_reemplazo_m1, **kwargs )
 
     num_reemplazo_m2 = N - num_reemplazo_m1
-    seleccionados_m2 = seleccionar_metodo(poblacion + hijos, 'torneo_deterministico', funcion_aptitud, fitness_relativo,clase_personaje, num_reemplazo_m2, M=M)
+    seleccionados_m2 = seleccionar_metodo(poblacion + hijos, metodo_seleccion_2, funcion_aptitud, fitness_relativo,clase_personaje, num_reemplazo_m2, **kwargs)
 
     nueva_generacion = seleccionados_m1 + seleccionados_m2
     #print(len(nueva_generacion))
-
+    
     for cromosoma in nueva_generacion:
         #print(cromosoma, atributos, total_puntos)
         cromosoma = ajustar_suma_final(cromosoma, atributos, total_puntos)

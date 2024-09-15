@@ -22,7 +22,7 @@ def mutacion_redistribucion(cromosoma,  prob_mutacion, total_puntos):
     # Asegurar que todos los valores sean enteros
     for attr in atributos:
         cromosoma[attr] = round(cromosoma[attr])
-
+    #print(cromosoma)
     return cromosoma
 
 def aplicar_mutacion(generacion,  prob_mutacion, total_puntos):

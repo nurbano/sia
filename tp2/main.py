@@ -1,12 +1,13 @@
 import argparse
-from src.tools import import_json, calcular_atributos_totales, plot_band_error_generation
+from src.tools import import_json, calcular_atributos_totales, plot_band_error_generation, plot_band_error_aptitud
 from src.poblacion import crear_poblacion_inicial
 from src.eve import calcular_aptitud, calcular_fitness_generacion, calcular_fitness_relativo
 from src.seleccion import seleccionar_padres, realizar_reemplazo, seleccionar_metodo, mostrar_seleccionados, seleccionar_nueva_generacion
 from src.crossover import realizar_crossover, generar_hijos
 from src.mutacion import aplicar_mutacion
-from src.tools import encontrar_mejor_cromosoma, calcular_diversidad_genetica
+from src.tools import encontrar_mejor_cromosoma, calcular_diversidad_genetica, plot_tasa_convergencia, plot_diversidad_genetica
 
+import time
 import sys
 import timeit
 import pandas as pd
@@ -40,7 +41,11 @@ aptitud_desviacion_historial = []
 diversidad_genetica_historial = []
 tasa_convergencia_historial = []
 diversidad_por_gen_historial = []
-
+APTITUD_PROMEDIO= []
+APTITUD_DESVIACION= []
+DIVERSIDAD_DESVIACION= []
+atributos_mean= np.zeros((data["max_generaciones"],6))
+atributos_std= np.zeros((data["max_generaciones"],6))
 # Lista para guardar los atributos del mejor cromosoma en cada generación
 mejores_atributos_historial = {atributo: [] for atributo in atributos}
 
@@ -51,16 +56,31 @@ mejores_cromosomas_por_generacion = []
 mejor_cromosoma_todas_generaciones = None
 mejor_aptitud_todas_generaciones = float('-inf')
 
+start = time.time()
+
 for generacion_actual in range(data["max_generaciones"]):
     # Calcular aptitudes actuales
     aptitudes = [calcular_aptitud(data["clase"], cromosoma) for cromosoma in poblacion]
+    
+    #print(aptitudes)
     mejor_cromosoma, mejor_aptitud_actual = encontrar_mejor_cromosoma(poblacion, calcular_aptitud, data["clase"])
     aptitud_promedio = np.mean(aptitudes)
     aptitud_minima = np.min(aptitudes)
     aptitud_desviacion = np.std(aptitudes)
-
+    APTITUD_PROMEDIO.append(aptitud_promedio)
+    APTITUD_DESVIACION.append(aptitud_desviacion)
     # Calcular diversidad genética
-    diversidad = calcular_diversidad_genetica(poblacion, atributos)
+    diversidad, diversidad_desviacion= calcular_diversidad_genetica(poblacion, atributos)
+
+    df=pd.DataFrame({'fuerza': [], 'destreza': [], 'inteligencia': [], 'vigor': [], 'constitución': [], 'altura': []})
+
+    for pob in poblacion:
+        df_aux= pd.DataFrame([pob])
+        df= pd.concat([df, df_aux])
+    df= df.reset_index(drop=True)
+    for j, atributo in enumerate(df.columns):
+        atributos_mean[generacion_actual,j]=df[str(atributo)].mean()
+        atributos_std [generacion_actual,j]=df[str(atributo)].std()
 
     # Tasa de convergencia
     if mejor_aptitud_anterior is not None:
@@ -88,9 +108,10 @@ for generacion_actual in range(data["max_generaciones"]):
     aptitud_minima_historial.append(aptitud_minima)
     aptitud_desviacion_historial.append(aptitud_desviacion)
     diversidad_genetica_historial.append(diversidad)
+    DIVERSIDAD_DESVIACION.append(diversidad_desviacion)
     tasa_convergencia_historial.append(tasa_convergencia)
 
-    print(f"Generación {generacion_actual + 1} | Mejor Aptitud: {mejor_aptitud_actual} | Promedio: {aptitud_promedio:.4f} | Diversidad: {diversidad:.4f} | Tasa Convergencia: {tasa_convergencia:.4f}")
+    print(f"Generación {generacion_actual + 1} | Mejor Aptitud: {mejor_aptitud_actual: .4f} | Promedio: {aptitud_promedio:.4f} | Diversidad: {diversidad:.4f} | Tasa Convergencia: {tasa_convergencia:.4f}")
 
     # Verificar si la aptitud ha dejado de mejorar significativamente
     if mejor_aptitud_anterior is not None and abs(mejor_aptitud_actual - mejor_aptitud_anterior) < data["delta_fitness_min"]:
@@ -116,120 +137,66 @@ for generacion_actual in range(data["max_generaciones"]):
                                                                              calcular_aptitud, 
                                                                              data["clase"]))
     nueva_generacion = seleccionar_nueva_generacion(poblacion, hijos,
-                                                 calcular_aptitud,
-                                                 fitness_rel_nueva_gen,                                                   data["clase"], 
-                                                   data["total_puntos"],
-                                                   data["poblacion"],
-                                                     data["prop_reemplazo"],
-                                                       data["tam_torneo"])
+                                                    calcular_aptitud,
+                                                    fitness_rel_nueva_gen,
+                                                    data["metodo_seleccion_1"],
+                                                    data["metodo_seleccion_2"],
+                                                    data["clase"], 
+                                                    data["total_puntos"],
+                                                    data["poblacion"],
+                                                    data["prop_reemplazo"],
+                                                    M= data["tam_torneo"],
+                                                    T0= data["T0"],
+                                                    Tc= data["Tc"],
+                                                    t= data["t"],
+                                                    threshold= data["th_torneo"])
 
     # 5. Aplicar mutación
-    nueva_generacion_mutada =  aplicar_mutacion(nueva_generacion,  data["prob_mutacion"], data["poblacion"])
+    nueva_generacion_mutada =  aplicar_mutacion(nueva_generacion,  data["prob_mutacion"], data["total_puntos"])
 
     # Actualizar aptitud y población para la siguiente generación
     mejor_aptitud_anterior = mejor_aptitud_actual
     poblacion = nueva_generacion_mutada
-    
-for i, registro in enumerate(mejores_cromosomas_por_generacion):
-    print(f"Generación {i + 1}: Cromosoma: {registro['cromosoma']}, Aptitud: {registro['aptitud']:.4f}")
+    t_parcial= time.time()-start
+    print("Tiempo parcial: ", t_parcial, " segundos")
+    if t_parcial > data["tiempo"]:
+        print("El algoritmo se detuvo por tiempo.")
+        break
 
+
+
+end = time.time()
+print(f'Tiempo: {end - start} segundos')    
+for i, registro in enumerate(mejores_cromosomas_por_generacion):
+    registro
+    #print(f"Generación {i + 1}: Cromosoma: {registro['cromosoma']}, Aptitud: {registro['aptitud']:.4f}")
+
+
+print(registro)
 # Imprimir el mejor cromosoma de todas las generaciones
 print(f"\nMejor cromosoma encontrado en todas las generaciones: {mejor_cromosoma_todas_generaciones}, Aptitud: {mejor_aptitud_todas_generaciones:.4f}")
 
+cant_generaciones= len(mejores_cromosomas_por_generacion)
 # Graficar los resultados
+x= np.arange(len(APTITUD_PROMEDIO))
+y= np.array(APTITUD_PROMEDIO)
+y_upper= np.array(APTITUD_PROMEDIO)+np.array(APTITUD_DESVIACION)
+y_lower= np.array(APTITUD_PROMEDIO)-np.array(APTITUD_DESVIACION)
+y_max= np.array(mejores_aptitudes)
+y_min= np.array(aptitud_minima_historial)
+plot_band_error_aptitud(x[:cant_generaciones], y[:cant_generaciones], y_upper[:cant_generaciones], y_lower[:cant_generaciones], y_max[:cant_generaciones], y_min[:cant_generaciones])
 
-# Gráficas existentes
-plt.figure(figsize=(10, 5))
-plt.plot(mejores_aptitudes, label="Mejor Aptitud")
-plt.title("Mejor Aptitud a lo largo de las Generaciones")
-plt.xlabel("Generación")
-plt.ylabel("Mejor Aptitud")
-plt.legend()
-plt.show()
+x= np.arange(data["max_generaciones"])
+y= atributos_mean
+y_max= atributos_mean+atributos_std
+y_min= atributos_mean-atributos_std
 
-plt.figure(figsize=(10, 5))
-plt.plot(aptitud_minima_historial, label="Aptitud Mínima")
-plt.title("Aptitud Mínima a lo largo de las Generaciones")
-plt.xlabel("Generación")
-plt.ylabel("Aptitud Mínima")
-plt.legend()
-plt.show()
+plot_band_error_generation(x[:cant_generaciones],y[:cant_generaciones], y_max[:cant_generaciones], y_min[:cant_generaciones] )
+plot_tasa_convergencia(tasa_convergencia_historial)
 
-plt.figure(figsize=(10, 5))
-plt.plot(aptitud_desviacion_historial, label="Desviación Estándar de Aptitud")
-plt.title("Desviación Estándar de la Aptitud a lo largo de las Generaciones")
-plt.xlabel("Generación")
-plt.ylabel("Desviación Estándar")
-plt.legend()
-plt.show()
 
-plt.figure(figsize=(10, 5))
-plt.plot(tasa_convergencia_historial, label="Tasa de Convergencia")
-plt.title("Tasa de Convergencia a lo largo de las Generaciones")
-plt.xlabel("Generación")
-plt.ylabel("Tasa de Convergencia")
-plt.legend()
-plt.show()
-
-plt.figure(figsize=(10, 5))
-plt.plot(diversidad_genetica_historial, label="Diversidad Genética")
-plt.title("Diversidad Genética a lo largo de las Generaciones")
-plt.xlabel("Generación")
-plt.ylabel("Diversidad Genética")
-plt.legend()
-plt.show()
-
-# Nuevas gráficas de los atributos del mejor cromosoma a lo largo de las generaciones
-for atributo in atributos:
-    plt.figure(figsize=(10, 5))
-    plt.plot(mejores_atributos_historial[atributo], label=f"{atributo.capitalize()}")
-    plt.title(f"Evolución de {atributo.capitalize()} del Mejor Cromosoma a lo largo de las Generaciones")
-    plt.xlabel("Generación")
-    plt.ylabel(f"{atributo.capitalize()}")
-    plt.legend()
-    plt.show()
-
-# fitness=calcular_fitness_generacion(poblacion,data["clase"])
-# fitness_rel= np.asarray(calcular_fitness_relativo(poblacion, calcular_aptitud, data["clase"]))
-
-# padres = seleccionar_padres(poblacion, calcular_aptitud, fitness_rel,
-#                              data["clase"], data["total_puntos"], K, data["prop_sel_padres"])
-# mostrar_seleccionados("Padres Seleccionados", padres, calcular_aptitud, data["clase"])
-
-# hijos = generar_hijos(padres, K, data["total_puntos"])
-# mostrar_seleccionados("Hijos Generados", hijos, calcular_aptitud,  data["clase"])
-# fitness_rel_nueva_gen= fitness_rel= np.asarray(calcular_fitness_relativo(poblacion+hijos, calcular_aptitud, data["clase"]))
-# print(fitness_rel_nueva_gen)
-# nueva_generacion = seleccionar_nueva_generacion(poblacion, hijos,
-#                                                  calcular_aptitud,
-#                                                  fitness_rel_nueva_gen,                                                   data["clase"], 
-#                                                    data["total_puntos"],
-#                                                    data["poblacion"],
-#                                                      data["prop_reemplazo"],
-#                                                        data["tam_torneo"])
-# mostrar_seleccionados("Nueva Generación", nueva_generacion, calcular_aptitud, data["clase"])
-
-# nueva_generacion_mutada = aplicar_mutacion(nueva_generacion,  data["prob_mutacion"], data["poblacion"])
-# mostrar_seleccionados("Nueva Generación Mutada", nueva_generacion_mutada, calcular_aptitud, data["clase"])
-
-# print(f'Fitness generación incial: {fitness.mean():.3f} (mean) | {fitness.std():.3f}(std)')
-# print(f'Fitness Relativo generación incial: {fitness_rel.mean():.3f} (mean) | {fitness_rel.std():.3f}(std)')
-
-# seleccionados = seleccionar_metodo(poblacion, 'torneo_probabilistico', calcular_aptitud, 
-#                                    fitness_rel, data["clase"], K
-#                                    , threshold=data["th_torneo"])
-# mostrar_seleccionados("torneo_deterministico", seleccionados, calcular_aptitud, data["clase"])
-
-# padres = seleccionar_padres(poblacion, fitness, data["porc_ruleta"], data["porc_padres"])
-
-# #print(f'Len padres: {len(padres)}')
-# fitness_padres =calcular_fitness_generacion(padres,data["clase"])  
-# print(f'Fitness generación seleccionada: {fitness_padres.mean():.3f} (mean) | {fitness_padres.std():.3f}(std)')
-
-# nueva_poblacion= realizar_reemplazo(poblacion, fitness, padres, fitness_padres, data["porc_elite"], data["poblacion"])
-# fitness_nueva_poblacion =calcular_fitness_generacion(nueva_poblacion,data["clase"])  
-# print(f'Fitness nueva población: {fitness_nueva_poblacion.mean():.3f} (mean) | {fitness_nueva_poblacion.std():.3f}(std)')
-# # print("hola")
-# descendientes = realizar_crossover(padres, data["total_puntos"])
-# fitness_descendientes = calcular_fitness_generacion(descendientes, data["clase"])
-# print(f'Fitness descendientes: {fitness_descendientes.mean():.3f} (mean) | {fitness_descendientes.std():.3f}(std)')
+plot_band_error_generation(x[:cant_generaciones],y[:cant_generaciones], y_max[:cant_generaciones], y_min[:cant_generaciones] )
+y= np.array(diversidad_genetica_historial)
+y_upper= y+np.array(DIVERSIDAD_DESVIACION)
+y_lower= y-np.array(DIVERSIDAD_DESVIACION)
+plot_diversidad_genetica(y, y_upper, y_lower)
