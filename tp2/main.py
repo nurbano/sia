@@ -23,7 +23,7 @@ parser.add_argument("--iter", default=1, help="Iteration")
 args= parser.parse_args(cmd_args)
 
 data= import_json(args.config_json)
-name_config= args.config_json.split(".json")[0].split(".\\config\\")[1]
+name_config= args.config_json.split(".json")[0].split("./config/")[1] #En windows usar .\\config\\
 iter= int(args.iter)
 print(f'Puntos totales: {data["total_puntos"]}')
 print(f'Población: {data["poblacion"]}')
