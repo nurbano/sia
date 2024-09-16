@@ -13,9 +13,9 @@
     "t" : 10,
     "tam_torneo": 3,
     "th_torneo": 0.3,
-    "prop_reemplazo": 0.5,
-    "metodo_seleccion_1": "ruleta",
+    "prop_reemplazo": 1,
+    "metodo_seleccion_1": "torneo_deterministico",
     "metodo_seleccion_2": "torneo_deterministico",
-    "prob_mutacion": 0.01
+    "prob_mutacion": 0.05
 
 }

@@ -4,8 +4,8 @@
     "tiempo": 600,
     "max_generaciones": 50,
     "clase": "mago",
-    "delta_fitness_min": 0.00001,
-    "max_estancamiento": 10,
+    "delta_fitness_min": 0.001,
+    "max_estancamiento": 5,
     "porcentaje_hijos": 0.5,
     "prop_sel_padres": 0.7,
     "T0" : 100,  
@@ -13,9 +13,9 @@
     "t" : 10,
     "tam_torneo": 3,
     "th_torneo": 0.3,
-    "prop_reemplazo": 0.5,
-    "metodo_seleccion_1": "ruleta",
+    "prop_reemplazo": 1,
+    "metodo_seleccion_1": "elite",
     "metodo_seleccion_2": "torneo_deterministico",
-    "prob_mutacion": 0.01
+    "prob_mutacion": 0.1
 
 }

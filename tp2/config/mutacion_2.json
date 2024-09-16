@@ -4,7 +4,7 @@
     "tiempo": 600,
     "max_generaciones": 50,
     "clase": "mago",
-    "delta_fitness_min": 0.001,
+    "delta_fitness_min": 0.00001,
     "max_estancamiento": 10,
     "porcentaje_hijos": 0.5,
     "prop_sel_padres": 0.7,

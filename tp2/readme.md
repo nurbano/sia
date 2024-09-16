@@ -11,7 +11,7 @@ Primero es necesario clonar el respositorio:
 ```console
 git clone https://github.com/nurbano/sia
 ```
-Luego hay que ir al directorio tp1:
+Luego hay que ir al directorio tp2:
 
 ```console
 cd sia/tp2

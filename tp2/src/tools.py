@@ -21,25 +21,32 @@ def calcular_atributos_totales(cromosoma):
         "constitucion_total": 100 * math.tanh(0.01 * cromosoma["constitución"])
     } 
 
-def plot_tasa_convergencia(tasa_convergencia):
-    x= np.arange(len(tasa_convergencia))
-    y= np.array(tasa_convergencia)
+def plot_tasa_convergencia(y, y_upper, y_lower, name):
+    x= np.arange(len(y))
     fig = go.Figure( [
         go.Scatter(
                 x=x,
                 y=y,
                 line=dict(color='rgb(0,100,80)'),
-                mode='lines+markers',
-                name="Tasa de convergencia",
-                showlegend=True
-            )
-            ] )
+                mode='lines',
+                name="Promedio"
+            ),
+            
+        go.Scatter(
+            x=np.concatenate((x,x[::-1])), # x, then x reversed
+            y=np.concatenate((y_upper,y_lower[::-1])), # upper, then lower reversed
+            fill='toself',
+            fillcolor='rgba(0,100,80,0.2)',
+            line=dict(color='rgba(255,255,255,0)'),
+            hoverinfo="skip",
+            showlegend=False
+        ) ] )
     fig.update_xaxes(title_text="Generación")
     fig.update_yaxes(title_text="Tasa de convergencia")
-    fig.write_image("./images/convergencia.png")
+    fig.write_image(f'./images/{name}_convergencia.png')
     #fig.show()
 
-def plot_diversidad_genetica(y, y_upper, y_lower):
+def plot_diversidad_genetica(y, y_upper, y_lower, name):
     x= np.arange(len(y))
     y= np.array(y)
     fig = go.Figure( [
@@ -61,23 +68,14 @@ def plot_diversidad_genetica(y, y_upper, y_lower):
                 hoverinfo="skip",
                 showlegend=False
             ) ] )
-    # fig = go.Figure( [
-    #     go.Scatter(
-    #             x=x,
-    #             y=y,
-    #             line=dict(color='rgb(0,100,80)'),
-    #             mode='lines+markers',
-    #             name="Diversidad Genética",
-    #             showlegend=True
-    #         )
-    #         ] )
+
     fig.update_xaxes(title_text="Generación")
     fig.update_yaxes(title_text="Diversidad Genética")
-    fig.write_image("./images/diversidad.png")
+    fig.write_image(f'./images/{name}_diversidad.png')
     #fig.show()
 
 
-def plot_band_error_aptitud(x, y, y_upper, y_lower, y_max, y_min):
+def plot_band_error_aptitud(x, y, y_upper, y_lower, y_max, y_min, name):
     fig = go.Figure( [
        
             go.Scatter(
@@ -112,10 +110,10 @@ def plot_band_error_aptitud(x, y, y_upper, y_lower, y_max, y_min):
             ) ] )
     fig.update_xaxes(title_text="Generación")
     fig.update_yaxes(title_text="Aptitud")
-    fig.write_image("./images/aptitud.png")
+    fig.write_image(f'./images/{name}_aptitud.png')
     #fig.show()
 
-def plot_band_error_generation(x, y, y_upper, y_lower):
+def plot_band_error_generation(x, y, y_upper, y_lower,name):
     
     colors = ['rgb(0,100,80)', 'rgb(100,0,80)', 'rgb(80,100,0)', 'rgb(0,80,100)', 'rgb(80,0,100)', 'rgb(100,80,0)']
     fill_colors = ['rgba(0,100,80,0.2)', 'rgba(100,0,80,0.2)', 'rgba(80,100,0,0.2)', 'rgba(0,80,100,0.2)', 'rgba(80,0,100,0.2)', 'rgba(100,80,0,0.2)']
@@ -159,7 +157,7 @@ def plot_band_error_generation(x, y, y_upper, y_lower):
     fig.update_layout(height=900, width=1000, title_text="Distribución de Atributos", showlegend=True)
 
     # Mostrar la figura
-    fig.write_image("./images/atributos.png")
+    fig.write_image(f'./images/{name}_atributos.png')
     #fig.show()
 
 def encontrar_mejor_cromosoma(poblacion, funcion_aptitud, clase_personaje):
