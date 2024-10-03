@@ -1,0 +1,9 @@
+{
+    "x" : [[-1, 1], [1, -1], [-1, -1], [1, 1]],
+    "y" : [-1, -1, -1, 1],
+    "input_size": 2,
+    "learning_rate": 0.1,
+    "epochs": 20,
+    "activation_function": "linear"
+
+}
