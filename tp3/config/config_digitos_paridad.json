@@ -1,0 +1,15 @@
+{
+    "x" : 0,
+    "y" : 0,
+    "input_size": 35,
+    "hidden_size":15,
+    "learning_rate": 0.01,
+    "epochs": 1000,
+    "weight_update_method": "Adam",
+    "activation_function": "sigmoide",
+    "file": "./data/TP3-ej3-digitos.txt",
+    "normalizar": "False",
+    "iteraciones": 1
+    
+   
+}

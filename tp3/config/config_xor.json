@@ -4,6 +4,8 @@
     "input_size": 2,
     "learning_rate": 0.1,
     "epochs": 100,
-    "activation_function": "linear"
+    "activation_function": "step",
+    "file": "None",
+    "normalizar": "False"
 
 }

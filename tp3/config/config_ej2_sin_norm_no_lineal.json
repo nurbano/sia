@@ -1,0 +1,12 @@
+{
+    "x" : 0,
+    "y" : 0,
+    "input_size": 3,
+    "learning_rate": 0.01,
+    "epochs": 100,
+    "activation_function": "sigmoide",
+    "file": "./data/TP3-ej2-conjunto.csv",
+    "normalizar": "False",
+    "iteraciones": 1
+
+}
