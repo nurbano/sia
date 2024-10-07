@@ -53,7 +53,7 @@ for i in range(data["iteraciones"]):
                                 learning_rate=data["learning_rate"], 
                                 epochs=data["epochs"], 
                                 activation=data["activation_function"])
-     errors, df_aux= perceptron.train(x, y)
+     errors, df_aux, weights_history= perceptron.train(x, y)
      df_aux["Iteración"]= i
      if i==0:
           df= df_aux
@@ -63,15 +63,32 @@ for i in range(data["iteraciones"]):
 
 
 df.to_excel(f'./results/{name_config}.xlsx', index=False)
-print(df)
+print(weights_history)
 plt.plot(errors, marker='o', color='red')
 plt.title(f'Evolución del Error para la config {name_config}')
 plt.xlabel('Épocas')
-plt.ylabel('MSE')
+plt.ylabel('Erro Acumulado')
 plt.grid(True)
 plt.savefig(f'./images/plot_error_{name_config}.png')
 plt.show()
 
+class_1 = x[y == 1]
+class_neg_1 = x[y == -1]
+plt.scatter(class_1[:, 0], class_1[:, 1], color='blue', label='Class 1', s=200)  # Larger points for Class 1
+plt.scatter(class_neg_1[:, 0], class_neg_1[:, 1], color='red', label='Class -1', s=200)  # Larger points for Class -1
+x1_sep= np.linspace(-1,1, 10)
+x2_sep= np.linspace(-1,1, 10)
+weights= weights_history.pop()
+y= x1_sep*weights[0]+ x2_sep*weights[1]
+# Add labels and title
+plt.xlabel('X1')
+plt.ylabel('X2')
+plt.title(f'Función {name_config}')
+plt.legend()
+
+# Display the plot
+plt.grid(True)
+plt.show()
 # error_medio_lineal_cv = cross_validation(
 #     perceptron_class=Perceptron,
 #     X=x,

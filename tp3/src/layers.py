@@ -21,10 +21,13 @@ class Perceptron:
             return value
         elif self.activation== 'step':
             # Función escalón (clasificación binaria)
-            return 1 if value >= 0 else -1
+            return np.where(value >= 0, 1, -1)
+            # return 1 if value >= 0 else -1
         elif self.activation== 'sigmoide':
             #función sigmoide para un perceptrón no lineal
             return 1 / (1 + np.exp(-value))
+        else:
+            raise ValueError("Función de activación no soportada")
         
     def activation_derivative(self, x):
         if self.activation == 'lineal':
@@ -46,36 +49,48 @@ class Perceptron:
         for epoch in range(self.epochs):
             total_error = 0  # Inicializamos el error total por época
             
-            for i in range(len(x)):
-                # Calculamos la salida del perceptrón
-                #weighted_sum = sum(self.weights[j] * x[i][j] for j in range(len(x[0]))) + self.bias
-                weighted_sum= np.dot(self.weights,  x[i]) + self.bias #Exitación
-                output = self.activation_function(weighted_sum) #Salida neurona
+            # for i in range(len(x)):
+            #     # Calculamos la salida del perceptrón
+            #     #weighted_sum = sum(self.weights[j] * x[i][j] for j in range(len(x[0]))) + self.bias
+            #     weighted_sum= np.dot(self.weights,  x[i]) + self.bias #Exitación
+            #     output = self.activation_function(weighted_sum) #Salida neurona
 
-                # Calculamos el error
-                error = y[i] - output  #Salida esperada menos la salida obtenida
-                total_error += error ** 2  # ECM
-                #total_error += abs(error)  # Acumulamos el error absoluto
-                #mse+= error**2             # Acumulo el Error cuadrático MEDIO
+            #     # Calculamos el error
+            #     error = y[i] - output  #Salida esperada menos la salida obtenida
+            #     total_error += error ** 2  # ECM
+            #     #total_error += abs(error)  # Acumulamos el error absoluto
+            #     #mse+= error**2             # Acumulo el Error cuadrático MEDIO
                 
-                #Calculo del Gradiente
-                gradiente= error*self.activation_derivative(weighted_sum)
+            #     #Calculo del Gradiente
+            #     gradiente= error*self.activation_derivative(weighted_sum)
                
-                #Actualizo los parámetros
-                self.weights+=self.learning_rate * gradiente * np.asarray(x[i])
-                self.bias += self.learning_rate * gradiente
+            #     #Actualizo los parámetros
+            #     self.weights+=self.learning_rate * gradiente * np.asarray(x[i])
+            #     print(self.weights)
+            #     self.bias += self.learning_rate * gradiente
+            weighted_sum = np.dot(x, self.weights) + self.bias
+            output = self.activation_function(weighted_sum)
+            error = y - output  # Error for all samples
+            total_error = np.sum(error ** 2)  # MSE
 
+            # Gradient calculation
+            #gradient = error * self.activation_derivative(weighted_sum)
+            gradient = error * self.activation_derivative(output)
+            # Update weights and bias
+            self.weights += self.learning_rate * np.dot(x.T, gradient)
+            self.bias += self.learning_rate * np.sum(gradient)
             # Guardamos el error total para esta época
             self.weight_history.append(self.weights.copy())
             mse = total_error / len(x) #El error depende de todos
             errors_per_epoch.append(mse)
+            #print(self.weights.shape)
             # Mostrar los pesos, bias y error total para esta época
             #print(f"Época {epoch+1}: Pesos: {self.weights}, Bias: {self.bias}, MSE: {mse}")
             #print(epoch+1)
-            df_aux= pd.DataFrame({"Iteración": self.iter, "Activación": self.activation, "LR": self.learning_rate,"Época": epoch+1, "Pesos": [self.weights], "Bias": self.bias, "MSE": mse})
+            df_aux= pd.DataFrame({"Iteración": self.iter, "Activación": self.activation, "LR": self.learning_rate,"Época": epoch+1, "Pesos": self.weights, "Bias": self.bias, "MSE": mse})
             #print(df_aux)
             df= pd.concat([df,df_aux]).reset_index(drop=True)
-        return errors_per_epoch, df
+        return errors_per_epoch, df, self.weight_history
 
     # Función para predecir nuevas entradas
     def predict(self, x):
