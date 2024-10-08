@@ -7,7 +7,7 @@ from sklearn.metrics import confusion_matrix
 import seaborn as sns
 from src.layers import MLPDigitos
 
-data= keras.datasets.mnist.load_data(path="./data/mnist.npz")
+data= keras.datasets.mnist.load_data(path="mnist.npz")
 
 (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
 assert x_train.shape == (60000, 28, 28)

@@ -6,6 +6,7 @@
     "epochs": 100,
     "activation_function": "step",
     "file": "None",
-    "normalizar": "False"
+    "normalizar": "False",
+    "iteraciones": 1
 
 }
