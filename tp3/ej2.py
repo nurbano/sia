@@ -9,7 +9,7 @@ import timeit
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-
+from sklearn.model_selection import KFold
 
 cmd_args= sys.argv[1:]
 parser = argparse.ArgumentParser(description="TP3 Perceptrón"+ "\n"+"Autores:"+"\n"+"- Juan Dusau" "\n"+ "- Nicolás Urbano Pintos")
@@ -72,13 +72,27 @@ plt.grid(True)
 plt.savefig(f'./images/plot_error_{name_config}.png')
 plt.show()
 
-# error_medio_lineal_cv = cross_validation(
-#     perceptron_class=Perceptron,
-#     X=x,
-#     y=y,
-#     k=5,
-#     learning_rate=0.001,
-#     epochs=100,
-#     activation=data["activation_function"]
-# )
-# print(f'Error Medio de Validación (Perceptrón activación {data["activation_function"]}): {error_medio_lineal_cv}\n')
+kf= KFold(n_splits=5)
+MSE_TRAIN=[]
+MSE_TEST=[]
+for i, (train_index, test_index) in enumerate(kf.split(x)):
+
+    print(f"Fold {i}:")
+
+    #print(f"  Train: index={train_index}")
+    errors, df_aux,  weight_history= perceptron.train(x[train_index], y[train_index],verbose="False")
+    
+    print("MSE train", errors[-1])
+    MSE_TRAIN.append(errors[-1])
+    #print(f"  Test:  index={test_index}")
+    outputs= perceptron.predict(x[test_index])
+    error = y[test_index] - outputs  #Salida esperada menos la salida obtenida
+    
+    total_error =np.sum( error ** 2)
+    mse = total_error / len(x) #El error depende de todos
+    MSE_TEST.append(mse)
+    print("MSE test", mse)
+
+print(MSE_TRAIN, MSE_TEST)
+print(f"MSE Train Promedio: {sum(MSE_TRAIN)/len(MSE_TRAIN)}")
+print(f"MSE Test Promedio: {sum(MSE_TEST)/len(MSE_TEST)}")
