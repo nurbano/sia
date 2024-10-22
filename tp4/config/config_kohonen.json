@@ -1,0 +1,9 @@
+{
+    "K": 4,
+    "input_dim": 7,
+    "lr": 0.01,
+    "radius": 4,
+    "iter": 1000,
+    "normalization": "z-score"
+
+}
