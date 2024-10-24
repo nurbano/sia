@@ -204,3 +204,57 @@ class OjaNetwork:
         plt.title('Evolución de la Magnitud de los Pesos durante el Entrenamiento')
         plt.grid(True)
         plt.show()
+
+class Hopfield:
+    def __init__(self, input_dim, iter=10, convergence=2, seed=42):
+        self.input_dim= input_dim
+        self.neurons= input_dim
+        self.iter= iter
+        self.conv= convergence
+        self.K= np.zeros(self.neurons,)
+        np.random.seed(seed)
+        
+    def noise_with_k(self, pattern, noise_k): 
+        indexes = np.random.choice(np.arange(self.input_dim), noise_k, False)
+        print(indexes)
+        for index in indexes:
+            if pattern[index]==-1:
+                pattern[index]=1
+            else:
+                pattern[index]=-1
+        return pattern
+     
+    def calculate_weights(self, comb, dataset):
+        for comb_letter in comb:
+            for i, row in dataset.iterrows():
+                letter = row['letter']
+                if comb_letter==letter:
+                    matrix = np.array(row[1:].astype(int))
+                    self.K= np.column_stack((self.K,matrix))
+        self.K= self.K[:,1:]
+        self.W= (np.dot( self.K, self.K.T))/self.input_dim
+        np.fill_diagonal(self.W, 0)
+        return self.W
+    def iterate_state(self, intial_state):
+        ESTADOS=[]
+        ENERGY=[]
+        S_actual= intial_state
+        acu= 0
+        ESTADOS.append(S_actual) 
+        for i in range(self.iter):
+            
+            S_nuevo= np.sign(np.dot(self.W, S_actual))
+            energy= -0.5 * np.dot(S_actual, np.dot(self.W, S_actual))
+            ENERGY.append(energy)
+            if(np.array_equal(S_nuevo, S_actual)):
+                acu+=1
+                print("iter: ", i)
+                print("iguales")
+            if acu>self.conv:
+                break
+           
+            S_actual= S_nuevo
+            ESTADOS.append(S_nuevo)
+        return [ESTADOS, ENERGY] 
+
+

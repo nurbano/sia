@@ -1,0 +1,9 @@
+
+{
+"comb": ["x","e","g","d"],
+"input_dim":25, 
+"iter":20, 
+"conv":2,
+"k_noise": 5,
+"letter": "j"
+}

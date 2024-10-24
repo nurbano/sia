@@ -1,0 +1,9 @@
+
+{
+"comb": ["b","f","p","r"],
+"input_dim":25, 
+"iter":20, 
+"conv":2,
+"k_noise": 0,
+"letter": "f"
+}
