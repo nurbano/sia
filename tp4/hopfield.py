@@ -24,6 +24,8 @@ data= import_json(args.config_json)
 #Para calcular la ortogonalidad de todas las combinaciones:
 #df_orto= calculate_orto(df, True)
 df_orto= pd.read_csv("./data/calc_orto.csv")
+print(df_orto.head())
+print(df_orto.tail())
 
 best= df_orto.sort_values(by="AVG")["Comb"].iloc[0]
 worst= df_orto.sort_values(by="AVG", ascending=False)["Comb"].iloc[0]
@@ -37,6 +39,7 @@ pattern= obtain_letter_matrix(data["letter"], df)
 pattern= hopfield.noise_with_k(pattern, data["k_noise"])
 
 estados, energia= hopfield.iterate_state(pattern)
+print(energia[-1])
 plot_estados(estados)
 plt.show()
 plt.plot(energia)
