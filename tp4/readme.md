@@ -1,4 +1,4 @@
-## TP3: Aprendizaje no supervisado
+## TP4: Aprendizaje no supervisado
 
 ## Autores: 
 - Juan Dusau 
@@ -21,5 +21,18 @@ Es necesario instalar primero los paquetes requeridos:
 ```console
 pip install -r requirements.txt
 ```
+## OJA
 
-## Pre-entrega:PCA
+```console
+python oja.py --config_json .\config\config_oja.json    
+```
+
+## Kohonen
+```console
+python kohonen.py --config_json .\config\config_kohonen.json
+```
+
+## Hopfield
+```console
+python hopfield.py --config_json .\config\config_hopfield_best.json
+```
