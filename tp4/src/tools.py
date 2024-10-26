@@ -100,3 +100,12 @@ def obtain_letter_matrix(pattern_letter, dataset):
         if letter==pattern_letter:
             matrix = np.array(row[1:].astype(int))
     return matrix
+
+def standarization(array):
+    features= array.shape[1]
+    normalized_array= np.zeros_like(array)
+    for i in range(features):
+        mean = np.mean(array[:,i])
+        std_dev = np.std(array[:,i])
+        normalized_array[:,i] = (array[:,i] - mean) / std_dev
+    return normalized_array
