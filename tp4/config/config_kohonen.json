@@ -1,4 +1,5 @@
 {
+    "dataset_path": "./data/europe.csv",
     "K": 4,
     "input_dim": 7,
     "lr": 0.01,

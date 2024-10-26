@@ -203,7 +203,9 @@ class OjaNetwork:
         plt.ylabel('Magnitud de los Pesos')
         plt.title('Evolución de la Magnitud de los Pesos durante el Entrenamiento')
         plt.grid(True)
+        print(self.weight_history[-1])
         plt.show()
+
 
 class Hopfield:
     def __init__(self, input_dim, iter=10, convergence=2, seed=42):
