@@ -105,7 +105,7 @@ for i in range(n):
 
     decoded_img = (autoencoder.predict(flattened_data[i].reshape(1, -1)) > 0.5).astype(int)
     #decoded_img = autoencoder.predict(flattened_data[i].reshape(1, -1)) 
-    #print(decoded_img)
+    print(autoencoder.predict(flattened_data[i].reshape(1, -1)))
     dif= 35-np.count_nonzero(flattened_data[i].reshape(1, -1)==decoded_img)
     print(dif)
 
