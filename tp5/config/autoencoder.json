@@ -7,7 +7,7 @@
     "show_train": "True",
     "show_latent_space": "True",
     "show_letters": "True",
-    "show_similitud": "False",
+    "show_similitud": "True",
     "interpolar": "False",
     "char_start": "o",
     "char_end": "z"
