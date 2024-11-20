@@ -1,6 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import json
+
+def import_json(file_name):
+
+    f= open(file_name, 'r')
+    j=json.load(f)  
+    f.close()
+    return { atr: j[atr] for atr in j}
 
 # Función para convertir los valores hexadecimales a binarios de 7x5
 def to_bin_array(encoded_character):
@@ -29,3 +37,12 @@ def view_all_characters(fonts):
 
     plt.tight_layout()
     plt.show()
+
+# Definir una función para interpolar entre dos puntos en el espacio latente
+def interpolate_latent_points(point1, point2, num_steps=10):
+    """
+    Interpolación lineal entre dos puntos en el espacio latente.
+    """
+    ratios = np.linspace(0, 1, num_steps)
+    interpolated_points = np.array([(1 - ratio) * point1 + ratio * point2 for ratio in ratios])
+    return interpolated_points

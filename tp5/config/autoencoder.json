@@ -1,0 +1,17 @@
+{
+    "seed": 42,
+    "dataset": "Font3",
+    "epochs" : 1000,
+    "batch_size" : 32,
+    "learning_rate" : 0.005,
+    "show_train": "True",
+    "show_latent_space": "True",
+    "show_letters": "True",
+    "show_similitud": "False",
+    "interpolar": "False",
+    "char_start": "o",
+    "char_end": "z"
+
+
+
+}
