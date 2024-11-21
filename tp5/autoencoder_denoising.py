@@ -28,8 +28,12 @@ batch_size = data["batch_size"]
 learning_rate = data["learning_rate"]
 seed= data["seed"]
 np.random.seed(seed)
-if data["dataset"]=="Font3":
-    flattened_data = np.array([to_bin_array(char).flatten() for char in Font3])
+
+noised_data= np.load(f'./dataset/{data["dataset"]}.npy')
+flattened_data= np.load('./dataset/font3.npy')
+
+# if data["dataset"]=="Font3":
+#     flattened_data = np.array([to_bin_array(char).flatten() for char in Font3])
 
 autoencoder = Autoencoder(learning_rate=learning_rate)
 
@@ -57,7 +61,10 @@ for epoch in range(epochs):
 
     #     # Backward pass
     #     autoencoder.backward(X_batch, reconstructed_output)
-    reconstructed_output = autoencoder.forward(flattened_data)
+    
+    #reconstructed_output = autoencoder.forward(flattened_data)
+    
+    reconstructed_output = autoencoder.forward(noised_data)
     bce_loss = binary_cross_entropy(flattened_data, reconstructed_output)
     mse_loss = mean_squared_error(flattened_data, reconstructed_output)
     autoencoder.backward(flattened_data, reconstructed_output)
@@ -103,7 +110,7 @@ if data["show_latent_space"]== "True":
     plt.figure(figsize=(10, 8))
     for i, label in enumerate(character_labels):
         plt.scatter(encoded_imgs[i, 0], encoded_imgs[i, 1])
-        plt.text(encoded_imgs[i, 0] + 0.6, encoded_imgs[i, 1] + 0.7, label, fontsize=12)
+        plt.text(encoded_imgs[i, 0] + 0.05, encoded_imgs[i, 1] + 0.05, label, fontsize=9)
 
     plt.title('Distribución de los caracteres en el espacio latente con etiquetas')
     plt.xlabel('Dimensión Latente 1')
@@ -128,18 +135,22 @@ if data["show_letters"]=="True":
     for i in range(n):
         # Original
         ax = plt.subplot(num_rows * 2, num_cols, i + 1 + (i // num_cols) * num_cols)
-        original_img = flattened_data[i].reshape(7, 5)
+        # original_img = flattened_data[i].reshape(7, 5)
+        original_img = noised_data[i].reshape(7, 5)
         plt.imshow(original_img, cmap="binary")
         plt.title("Original")
         plt.axis("off")
 
         # Reconstruido (debajo del original)
         ax = plt.subplot(num_rows * 2, num_cols, i + 1 + num_cols + (i // num_cols) * num_cols)
-        reconstructed = autoencoder.reconstruct(flattened_data[i].reshape(1, -1))
+        # reconstructed = autoencoder.reconstruct(flattened_data[i].reshape(1, -1))
+        reconstructed = autoencoder.reconstruct(noised_data[i].reshape(1, -1))
         decoded_img = (reconstructed > 0.5).astype(int).reshape(7, 5)
 
         # Calcular la diferencia de píxeles
-        dif = np.sum(np.abs(original_img - decoded_img))
+        true_image= flattened_data[i].reshape(7, 5)
+        #dif = np.sum(np.abs(original_img - decoded_img))
+        dif = np.sum(np.abs(true_image - decoded_img))
         pixels_dif.append(dif)
 
         plt.imshow(decoded_img, cmap="binary")
