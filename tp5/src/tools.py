@@ -1,6 +1,14 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import json
+
+def import_json(file_name):
+
+    f= open(file_name, 'r')
+    j=json.load(f)  
+    f.close()
+    return { atr: j[atr] for atr in j}
 
 
 def from_bin_array(bin_array):
@@ -40,6 +48,7 @@ def view_all_characters(fonts):
     plt.tight_layout()
     plt.show()
 
+<<<<<<< HEAD
 def noise_with_k(data, n , noise_k): 
     indexes = np.random.choice(np.arange(n), noise_k, False)
     #print(indexes)
@@ -49,3 +58,13 @@ def noise_with_k(data, n , noise_k):
         else:
             data[index]=0
     return data
+=======
+# Definir una función para interpolar entre dos puntos en el espacio latente
+def interpolate_latent_points(point1, point2, num_steps=10):
+    """
+    Interpolación lineal entre dos puntos en el espacio latente.
+    """
+    ratios = np.linspace(0, 1, num_steps)
+    interpolated_points = np.array([(1 - ratio) * point1 + ratio * point2 for ratio in ratios])
+    return interpolated_points
+>>>>>>> 5872afa488b859d273de23d0aefa3877f33413ae
