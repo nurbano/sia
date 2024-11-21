@@ -54,7 +54,7 @@ autoencoder.compile(optimizer=opt, loss=losses_func, metrics=['mse'])
 #autoencoder.summary()
 # Hiperparámetros de entrenamiento
 epochs = 1000       # Número de épocas para el entrenamiento
-batch_size = 35     # Tamaño del lote
+batch_size = 32     # Tamaño del lote
 
 # Entrenamiento del Autoencoder
 history = autoencoder.fit(
@@ -105,7 +105,7 @@ for i in range(n):
 
     decoded_img = (autoencoder.predict(flattened_data[i].reshape(1, -1)) > 0.5).astype(int)
     #decoded_img = autoencoder.predict(flattened_data[i].reshape(1, -1)) 
-    print(autoencoder.predict(flattened_data[i].reshape(1, -1)))
+    print(decoded_img)
     dif= 35-np.count_nonzero(flattened_data[i].reshape(1, -1)==decoded_img)
     print(dif)
 

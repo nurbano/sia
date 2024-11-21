@@ -2,6 +2,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+
+def from_bin_array(bin_array):
+    encoded_character = []
+    for row in range(7):
+        current_row_value = 0
+        for col in range(5):
+            current_row_value |= (bin_array[row][4 - col] << col)
+        encoded_character.append(current_row_value)
+    return encoded_character
+
 # Función para convertir los valores hexadecimales a binarios de 7x5
 def to_bin_array(encoded_character):
     bin_array = np.zeros((7, 5), dtype=int)
@@ -29,3 +39,13 @@ def view_all_characters(fonts):
 
     plt.tight_layout()
     plt.show()
+
+def noise_with_k(data, n , noise_k): 
+    indexes = np.random.choice(np.arange(n), noise_k, False)
+    #print(indexes)
+    for index in indexes:
+        if data[index]==0:
+            data[index]=1
+        else:
+            data[index]=0
+    return data
