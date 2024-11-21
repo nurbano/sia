@@ -30,9 +30,9 @@ for i in range(32):
     ax = plt.subplot(num_rows * 2, num_cols, i + 1 + (i // num_cols) * num_cols)
     #print(flattened_data_noise[i])
     plt.imshow(flattened_data_noise[i].reshape(7, 5), cmap="binary")
-    plt.title("Original")
+    #plt.title("Original")
     plt.axis("off")
 plt.tight_layout()
 plt.show()
 
-np.save(f'./dataset/font3_noise_k_{args.k}.npy',flattened_data_noise )
+np.save(f'./dataset/font3_noise_k_{args.k}_2.npy',flattened_data_noise )

@@ -161,6 +161,40 @@ if data["show_letters"]=="True":
     plt.tight_layout()
     plt.show()
 
+if data["evaluate"]=="True":
+    evaluated_data= np.load(f'./dataset/{data["ev_dataset"]}.npy')
+    plt.figure(figsize=(20, num_rows * 2))
+    pixels_dif = []
+    for i in range(n):
+        # Original
+        ax = plt.subplot(num_rows * 2, num_cols, i + 1 + (i // num_cols) * num_cols)
+        # original_img = flattened_data[i].reshape(7, 5)
+        original_img =  evaluated_data[i].reshape(7, 5)
+        plt.imshow(original_img, cmap="binary")
+        plt.title("Original")
+        plt.axis("off")
+
+        # Reconstruido (debajo del original)
+        ax = plt.subplot(num_rows * 2, num_cols, i + 1 + num_cols + (i // num_cols) * num_cols)
+        # reconstructed = autoencoder.reconstruct(flattened_data[i].reshape(1, -1))
+        reconstructed = autoencoder.reconstruct(evaluated_data[i].reshape(1, -1))
+        decoded_img = (reconstructed > 0.5).astype(int).reshape(7, 5)
+
+        # Calcular la diferencia de píxeles
+        true_image= flattened_data[i].reshape(7, 5)
+        #dif = np.sum(np.abs(original_img - decoded_img))
+        dif = np.sum(np.abs(true_image - decoded_img))
+        pixels_dif.append(dif)
+
+        plt.imshow(decoded_img, cmap="binary")
+        plt.title("Reconstruido")
+        plt.axis("off")
+
+    print("Promedio de diferencias de píxeles:", np.mean(pixels_dif))
+    plt.tight_layout()
+    plt.show()
+
+
 if data["interpolar"]=="True":
     # Seleccionar los caracteres para la interpolación
     char_start = data["char_start"]
@@ -196,6 +230,8 @@ if data["interpolar"]=="True":
 
 if data["show_similitud"]== "True":
     # Lista de caracteres correspondientes al índice en Font3
+    
+    
     caracteres = character_labels
 
     # Verificar si algún carácter tiene valores constantes

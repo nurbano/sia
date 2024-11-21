@@ -1,0 +1,18 @@
+{
+    "seed": 42,
+    "dataset": "smile",
+    "epochs" : 1000,
+    "batch_size" : 100,
+    "learning_rate" : 0.01,
+    "show_train": "True",
+    "show_latent_space": "True",
+    "show_letters": "True",
+    "show_similitud": "False",
+    "show_latent_region": "True",
+    "interpolar": "True",
+    "char_start": "k",
+    "char_end": "p"
+
+
+
+}
