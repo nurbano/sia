@@ -23,8 +23,22 @@ pip install -r requirements.txt
 ```
 
 ## Autoencoder
-Es necesario generar un archivo de configuración .json, puede usar como ejeemplo autoencoder.json que se encuentra en el directory config.
+Es necesario generar un archivo de configuración .json, puede usar como ejemplo autoencoder.json que se encuentra en el directory config.
 
 ```console
 python autoencoder.py --config_json ./config/autoencoder.json
+```
+
+## Denoising Autoencoder
+Es necesario generar un archivo de configuración .json, puede usar como ejemplo autoencoder_denoising.json que se encuentra en el directory config.
+
+```console
+python autoencoder_denoising.py --config_json ./config/autoencoder_denoising.json
+```
+
+## VAE: Auto encoder variacional
+Es necesario generar un archivo de configuración .json, puede usar como ejemplo autoencoder_vae.json que se encuentra en el directory config.
+
+```console
+python autoencoder_vae.py --config_json ./config/autoencoder_vae.json
 ```

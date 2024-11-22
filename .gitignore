@@ -1,6 +1,7 @@
 *.mp4
 *.xlsx
 full_numpy_bitmap_smiley_face.npy
+autoencoder_keras.py
 tp1/scr/__pycache__/search.cpython-312.pyc
 tp1/scr/__pycache__/sokoban.cpython-312.pyc
 tp1/scr/__pycache__/tools.cpython-312.pyc
