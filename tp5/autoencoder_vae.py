@@ -47,7 +47,7 @@ autoencoder = Autoencoder_vae(input_size=input_size, hidden_size=hidden_size, la
 total_loss_history = []
 reconstruction_loss_history = []
 kl_loss_history = []
-
+kl_weight=[]
 # Entrenamiento
 for epoch in range(epochs):
     # Mezclar los datos
@@ -61,14 +61,20 @@ for epoch in range(epochs):
 
         # Forward pass
         reconstructed_output = autoencoder.forward(X_batch)
-
+        if data["kl_variable"]=="True":
+            kl_weight_var= epoch/epochs
+        else:
+            kl_weight_var= 1
         # Calcular la pérdida
-        total_loss, reconstruction_loss, kl_loss = loss_function(
-            X_batch, reconstructed_output, autoencoder.encoder.z_mean, autoencoder.encoder.z_log_var
+        total_loss, reconstruction_loss, kl_loss, kl = loss_function(
+            X_batch, reconstructed_output, 
+            autoencoder.encoder.z_mean, 
+            autoencoder.encoder.z_log_var,  kl_weight_var
         )
-
+        kl_weight.append(kl)
         # Backward pass
-        autoencoder.backward(X_batch, reconstructed_output)
+        autoencoder.backward(X_batch, reconstructed_output,  kl_weight_var)
+       
 
     # Almacenar las pérdidas al final de cada época
     total_loss_history.append(total_loss)
@@ -91,6 +97,12 @@ if data["show_train"]=="True":
     plt.legend()
     plt.grid(True)
     plt.show()
+    if data["kl_variable"]=="True":
+        plt.title('Variación del peso de KL')
+        plt.xlabel('Épocas')
+        plt.ylabel('Peso de KL')
+        plt.plot(kl_weight)
+        plt.show()
 
 if data["show_latent_region"]=="True":
     graficar_region_latente(autoencoder, n=20, digit_size=28, rango_latente_x=(-6, 1), rango_latente_y=(-2, 2))

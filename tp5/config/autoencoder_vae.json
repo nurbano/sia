@@ -11,7 +11,8 @@
     "show_latent_region": "True",
     "interpolar": "True",
     "char_start": "k",
-    "char_end": "p"
+    "char_end": "p",
+    "kl_variable": "True"
 
 
 

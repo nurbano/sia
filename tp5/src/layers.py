@@ -363,7 +363,7 @@ class Encoder_vae:
         return self.z
 
     # Retropropagación
-    def backward(self, grad_latent):
+    def backward(self, grad_latent, epoch_frac):
         # Derivadas parciales
         dz_dz_mean = 1
         dz_dz_log_var = 0.5 * np.exp(0.5 * self.z_log_var) * self.epsilon_sampling
@@ -374,7 +374,7 @@ class Encoder_vae:
 
         # Gradiente del término KL
         grad_kl_z_mean = self.z_mean
-        grad_kl_z_log_var = 0.5 * (np.exp(self.z_log_var) - 1)
+        grad_kl_z_log_var = 0.5 * (np.exp(self.z_log_var) - 1)*min(1.0, epoch_frac)
 
         # Gradiente total
         grad_z_mean = grad_reconstruction_z_mean + grad_kl_z_mean
@@ -566,7 +566,7 @@ class Autoencoder_vae:
         return self.reconstructed_output
 
     # Retropropagación
-    def backward(self, X, reconstructed_output):
+    def backward(self, X, reconstructed_output, epoch_frac):
         # Gradiente de la pérdida de reconstrucción con respecto a la salida
         epsilon = 1e-8
         reconstructed_output = np.clip(reconstructed_output, epsilon, 1 - epsilon)
@@ -579,7 +579,7 @@ class Autoencoder_vae:
         grad_z = self.decoder.grad_latent_input
 
         # Retropropagación a través del encoder
-        self.encoder.backward(grad_z)
+        self.encoder.backward(grad_z, epoch_frac)
 
         # Incrementar el contador de pasos
         self.t += 1
