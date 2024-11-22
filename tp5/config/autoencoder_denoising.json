@@ -1,9 +1,9 @@
 {
     "seed": 42,
-    "dataset": "font3_noise_k_10",
-    "epochs" : 1000,
+    "dataset": "font3",
+    "epochs" : 1200,
     "batch_size" : 32,
-    "learning_rate" : 0.005,
+    "learning_rate" : 0.02,
     "show_train": "True",
     "show_latent_space": "False",
     "show_letters": "False",
@@ -12,7 +12,9 @@
     "char_start": "k",
     "char_end": "p",
     "evaluate": "True",
-    "ev_dataset": "font3_noise_k_9"
+    "ev_dataset": "font3_noise_k_2",
+    "k":2
+
 
 
 

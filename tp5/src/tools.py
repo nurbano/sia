@@ -56,12 +56,13 @@ def view_all_characters(fonts):
 def noise_with_k(data, n , noise_k): 
     indexes = np.random.choice(np.arange(n), noise_k, False)
     #print(indexes)
+    new_data= np.copy(data)
     for index in indexes:
-        if data[index]==0:
-            data[index]=1
+        if new_data[index]==0:
+            new_data[index]=1
         else:
-            data[index]=0
-    return data
+            new_data[index]=0
+    return new_data
 
 # Definir una función para interpolar entre dos puntos en el espacio latente
 def interpolate_latent_points(point1, point2, num_steps=10):
@@ -194,3 +195,8 @@ def graficar_region_latente_auto(autoencoder, n=15, digit_size=28, puntos_latent
     plt.show()
 
 
+def generate_noise(flattened_data, k):
+    flattened_data_noise= np.empty_like(flattened_data)
+    for i in range(len(flattened_data)):
+        flattened_data_noise[i]= noise_with_k(flattened_data[i], 35, int(k))
+    return flattened_data_noise

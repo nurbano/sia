@@ -1,5 +1,5 @@
 from dataset.font3 import Font3
-from src.tools import to_bin_array, view_all_characters, import_json, interpolate_latent_points
+from src.tools import to_bin_array, view_all_characters, import_json, interpolate_latent_points, generate_noise
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -27,15 +27,15 @@ epochs = data["epochs"]
 batch_size = data["batch_size"]
 learning_rate = data["learning_rate"]
 seed= data["seed"]
-np.random.seed(seed)
+#np.random.seed(seed)
 
-noised_data= np.load(f'./dataset/{data["dataset"]}.npy')
+#noised_data= np.load(f'./dataset/{data["dataset"]}.npy')
 flattened_data= np.load('./dataset/font3.npy')
 
 # if data["dataset"]=="Font3":
 #     flattened_data = np.array([to_bin_array(char).flatten() for char in Font3])
 
-autoencoder = Autoencoder(learning_rate=learning_rate)
+autoencoder = Autoencoder(input_size=35, hidden_size=35, latent_size=2, learning_rate=learning_rate)
 
 # Almacenar los valores de BCE y MSE
 bce_history = []
@@ -63,8 +63,13 @@ for epoch in range(epochs):
     #     autoencoder.backward(X_batch, reconstructed_output)
     
     #reconstructed_output = autoencoder.forward(flattened_data)
-    
+    noised_data= generate_noise(flattened_data , data["k"] )
+    #print(noised_data[0])
+    #print(flattened_data[0])
+    # dif = np.sum(np.abs(flattened_data - noised_data))
+    # print(dif/len(noised_data))
     reconstructed_output = autoencoder.forward(noised_data)
+   
     bce_loss = binary_cross_entropy(flattened_data, reconstructed_output)
     mse_loss = mean_squared_error(flattened_data, reconstructed_output)
     autoencoder.backward(flattened_data, reconstructed_output)
